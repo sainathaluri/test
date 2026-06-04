@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build Spring Boot
 
 on:
   push:
@@ -6,22 +6,25 @@ on:
       - master
 
 jobs:
-  backend-build:
+  build:
 
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: 'temurin'
+          distribution: temurin
+          java-version: '17'
 
       - name: Build Spring Boot
-        run: |
-          cd backend
-          mvn clean package
+        run: ./mvnw clean package
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: springboot-jar
+          path: target/*.jar
